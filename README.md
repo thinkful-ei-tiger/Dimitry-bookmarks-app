@@ -1,9 +1,9 @@
 # Dimitry-bookmarks-app
 
-Live GH Pages Link: 
+Live GH Pages Link: https://thinkful-ei-tiger.github.io/Dimitry-bookmarks-app/
 
 
-Bookmarks app created using JQuery, Javascript, HTML, and CSS. 
+Bookmarks app created using JQuery, Javascript, HTML, and CSS. Uses RESTful Web API on the backend.  
 
 User Stories: Users can click on New to add a new bookmark containing a title, a URL link, a description, and a rating. User must include a Title and a URL. 
 User can see a list of bookmarks they've added when they first open the app in a view with the title and rating. 
