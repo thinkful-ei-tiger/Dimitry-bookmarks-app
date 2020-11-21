@@ -1,5 +1,10 @@
 # Dimitry-bookmarks-app
 
+Live GH Pages Link: 
+
+
+Bookmarks app created using JQuery, Javascript, HTML, and CSS. 
+
 User Stories: Users can click on New to add a new bookmark containing a title, a URL link, a description, and a rating. User must include a Title and a URL. 
 User can see a list of bookmarks they've added when they first open the app in a view with the title and rating. 
 User can click on a bookmark to display the detailed view which includes the description and site link. 
