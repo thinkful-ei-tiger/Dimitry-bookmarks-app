@@ -4,10 +4,12 @@ const $ = require('jquery');
 
 import './styles.css';
 
-import { updateStore, getStoreBookmarks, addToStore, store} from './store.js';
+import {getStoreBookmarks, addToStore, store} from './store.js';
+
+import {getBookmarks, addBookmark} from './api.js';
 
 //renderBookmark function 
-function renderBookmark(bookmark) {
+function bookmarkTemplateSting(bookmark) {
   var newBookmark = '';
   newBookmark += `<div data-item-id="${bookmark.id}" class='bookmark' >`;
   newBookmark += `  <p>${bookmark.title}</p>`;
@@ -30,8 +32,11 @@ function renderBookmark(bookmark) {
   }
   //Cancel button HERE
   newBookmark += `<div id="${bookmark.id}" >`;
-  $('div.bookmarks').append(newBookmark);
+  return newBookmark;
+}
 
+function renderBookmark(bookmark) {
+  $('div.bookmarks').append(bookmarkTemplateSting(bookmark));
 }
 
 function renderBookmarks() {
@@ -42,48 +47,15 @@ function renderBookmarks() {
   for (let i = 0; i < storeBookmarks.length; i++) {
     const bookmark = storeBookmarks[i];
     renderBookmark(bookmark);
-  };
+  }
 }
 
 /*renderBookmark('abcd', 'Pizza Hut', 'http://pizzahut.com', 'not bad pizza... eat some.', 3);
 renderBookmark('abcde', 'Papa Johns', 'http://papajohns.com');*/
 
-//???addBookmark function which will post to the API so that we can the bookmark. ???
-function addBookmark(title, url, desc = '', rating = 0) {
-  if (title === '' || url ==='') {
-    store.error = 'You done goofed! Please enter a Title and a URL.';
-    addErrorToDom(); 
 
-  } else {
-    var newBookmark = { 'title': title, 'url': url };
-    if (rating >= 1 && rating <= 5) {
-      newBookmark['rating'] = rating;
-    }
-    if (desc) {
-      newBookmark['desc'] = desc;
-    }
-    return fetch('https://thinkful-list-api.herokuapp.com/dimitry/bookmarks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newBookmark)
-    });
-  }
-}
 
 /*renderBookmark(fbk.id, fbk.title, fbk.url, fbk.desc, fbk.rating);*/
-
-//getBookmarks function to get data from API. 
-function getBookmarks() {
-  fetch('https://thinkful-list-api.herokuapp.com/dimitry/bookmarks')
-    .then(response => response.json())
-    .then(responseJsonObj => {
-      for (let bookmark of responseJsonObj) bookmark.expanded = false;
-      updateStore(responseJsonObj);
-      renderBookmarks();
-    })
-    //    .then(responseJson => console.log(responseJson))
-    .catch(error => console.log(error));
-}
 
 //get itemId function to expand the view.
 function getItemIdFromElement(item) {
@@ -128,32 +100,30 @@ function handleFilterByRating() {
 //Attach event listener for each one so that when clicked it filters the bookmarks
 
 //renderAddFrom function to create HTML inside of index.html page
-function renderAddForm() {
+function addFormTemplateString() {
   var myBookmarks = '';
   myBookmarks = `<form id='bookmark-form'>
   <h3>Create Bookmark<h3>
   <div id='error'></div>
   
   <div class='item1'>
-    <label for="title"></label>
-    <input id="title" type="text" name="title"
+    <input aria-label='Title' name="title" id="title" type="text"
     placeholder="Enter Title">
   </div>
 
   <div class='item1'>
-    <input id="url" type="url" name="url"
+    <input aria-label='url' id="url" type="url" name="url"
     placeholder="Enter url using https://"> 
   </div>
 
   <div class='item1'>
-    <label for="form-message"></label>
-    <textarea id="form-message" name="message"
+    <textarea aria-label='description' id="form-message" name="message"
     placeholder="Enter Description"></textarea>
   </div>
   
   <div class='item1'>
-    <label for ='rating'> Rating</label>
-    <select name='rating' id='rating-dropdown' required>
+    <label for ='rating'>Rating</label>
+    <select aria-label='rating' name='rating' id='rating-dropdown' required>
     <option value=''>None</option>
     <option value='1'>1</option>
     <option value='2'>2</option>
@@ -166,14 +136,21 @@ function renderAddForm() {
   <button name='submit' class='js-submit-button'>Submit</button>
   <button name='cancel' class='js-cancel-button' id='cancel-button'>Cancel</button>
 </form>`;
-  $('div.bookmarks').html(myBookmarks);
+  return myBookmarks;
+}
 
+function renderAddForm() {
+  $('div.bookmarks').html(addFormTemplateString);
+}
+
+function errorToDomTemplateString() {
+  var errorCheck = `<p>${store.error}</p>`;
+  return errorCheck;
 }
 
 function addErrorToDom() {
-  var errorCheck = `<p>${store.error}</p>`;
   $('#error').empty();
-  $('#error').append(errorCheck);
+  $('#error').append(errorToDomTemplateString);
 }
 
 function handleCancelButton() {
@@ -250,4 +227,6 @@ function handleBookmarkApp() {
   handleCancelButton();
 }
 
-$(handleBookmarkApp)
+$(handleBookmarkApp);
+
+export {renderBookmarks, addErrorToDom};

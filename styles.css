@@ -35,6 +35,12 @@ div .group {
   }
 }
 
+/*hide filter by rating label*/
+label[for='filter-by-rating'] [for='bookmark-title'] [for='url'] [for='url-description']
+{
+  display: none;
+}
+
 /*setting centent for new and filter by Rating buttons using group and item class*/
   .group {
     display: flex;
